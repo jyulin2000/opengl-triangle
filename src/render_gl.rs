@@ -28,7 +28,7 @@ impl Program {
                 gl::GetProgramiv(program_id, gl::INFO_LOG_LENGTH, &mut len);
             }
         
-            let error = create_whitespace_cstring_with_len(len as usize);
+            let error = whitespace_cstring_with_len(len as usize);
         
             unsafe {
                 gl::GetProgramInfoLog(
@@ -43,10 +43,16 @@ impl Program {
         }
 
         for shader in shaders {
-            unsafe { gl::DetachShader(program_id); }
+            unsafe { gl::DetachShader(program_id, shader.id()); }
         }
 
         Ok(Program { id: program_id })
+    }
+
+    pub fn set_used(&self) {
+        unsafe {
+            gl::UseProgram(self.id);
+        }
     }
 
     pub fn id(&self) -> gl::types::GLuint {
