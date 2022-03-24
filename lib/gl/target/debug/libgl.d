@@ -1,0 +1,1 @@
+/Users/lilychen/Projects/Rust-Graphics/game/lib/gl/target/debug/libgl.rlib: /Users/lilychen/Projects/Rust-Graphics/game/lib/gl/build.rs /Users/lilychen/Projects/Rust-Graphics/game/lib/gl/src/lib.rs /Users/lilychen/Projects/Rust-Graphics/game/lib/gl/target/debug/build/gl-102a249caa59e496/out/bindings.rs
