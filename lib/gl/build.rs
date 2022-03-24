@@ -1,7 +1,7 @@
 extern crate gl_generator;
 extern crate gl_generator_profiling_struct;
 
-use gl_generator::{Api, Fallbacks, StructGenerator, Profile, Registry};
+use gl_generator::{Api, Fallbacks, DebugStructGenerator, StructGenerator, Profile, Registry};
 use gl_generator_profiling_struct::ProfilingStructGenerator;
 use std::env;
 use std::fs::File;
@@ -19,9 +19,17 @@ fn main() {
         ["GL_NV_command_list"],
     );
 
-    registry
-        .write_bindings(ProfilingStructGenerator, &mut file_gl)
-        .unwrap();
+    if env::var("CARGO_FEATURE_DEBUG").is_ok() {
+        registry.write_bindings(
+            DebugStructGenerator,
+            &mut file_gl
+        ).unwrap();
+    } else {
+        registry.write_bindings(
+            StructGenerator,
+            &mut file_gl
+        ).unwrap();
+    }
 }
 /*
 
