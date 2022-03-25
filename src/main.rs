@@ -1,6 +1,7 @@
 extern crate sdl2;
 extern crate gl;
 
+pub mod resources;
 pub mod render_gl;
 
 fn main() {
@@ -226,55 +227,77 @@ fn main() {
         //gl.PolygonMode(gl.FRONT_AND_BACK, gl.LINE);
     }
 
+    'main: for i in 1..100 {
+        for event in event_pump.poll_iter() {
+            match event {
+                sdl2::event::Event::Quit {..} => break 'main,
+                _ => {},
+            }
+        }
+        unsafe {
+            gl.Clear(gl::COLOR_BUFFER_BIT);
+        }
+
+        shader_program.set_used();
+        
+        // Draw parallelogram in bottom-left
+        unsafe {
+            gl.BindVertexArray(vao);
+            gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ebo);
+            gl.DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
+            gl.BindVertexArray(0);
+            gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
+        }
+        
+        shader_program2.set_used();
+        // Draw triangle in top-right
+        unsafe {
+            gl.BindVertexArray(vao2);
+            //gl.BindBuffer(gl.ARRAY_BUFFER, vbo2);
+            gl.DrawArrays(gl::TRIANGLES, 0, 3);
+            
+
+            gl.BindVertexArray(0);
+            //gl.BindBuffer(gl.ARRAY_BUFFER, 0);
+        }
+
+        window.gl_swap_window();
+    }
+    /* 
     'main: loop {
         for event in event_pump.poll_iter() {
             match event {
                 sdl2::event::Event::Quit {..} => break 'main,
                 _ => {},
             }
-
-            unsafe {
-                gl.Clear(gl::COLOR_BUFFER_BIT);
-            }
-
-            //vertices[7] *= 1.01;
-
-            shader_program.set_used();
-
-            // unsafe {
-            //     gl.BindVertexArray(vao);
-            //     gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
-            //     gl.DrawArrays(
-            //         gl.TRIANGLES, //mode
-            //         0, // starting index in the enabled arrays
-            //         3 // number of indices to be rendered
-            //     );
-            //     gl.BindVertexArray(0);
-            //     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
-            // }
-            
-            // Draw parallelogram in bottom-left
-            unsafe {
-                gl.BindVertexArray(vao);
-                gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ebo);
-                gl.DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
-                gl.BindVertexArray(0);
-                gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
-            }
-            
-            shader_program2.set_used();
-            // Draw triangle in top-right
-            unsafe {
-                gl.BindVertexArray(vao2);
-                //gl.BindBuffer(gl.ARRAY_BUFFER, vbo2);
-                gl.DrawArrays(gl::TRIANGLES, 0, 3);
-                
-
-                gl.BindVertexArray(0);
-                //gl.BindBuffer(gl.ARRAY_BUFFER, 0);
-            }
-
-            window.gl_swap_window();
         }
+        unsafe {
+            gl.Clear(gl::COLOR_BUFFER_BIT);
+        }
+        shader_program.set_used();
+        
+        // Draw parallelogram in bottom-left
+        unsafe {
+            gl.BindVertexArray(vao);
+            gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ebo);
+            gl.DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
+            gl.BindVertexArray(0);
+            gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
+        }
+        
+        shader_program2.set_used();
+        // Draw triangle in top-right
+        unsafe {
+            gl.BindVertexArray(vao2);
+            //gl.BindBuffer(gl.ARRAY_BUFFER, vbo2);
+            gl.DrawArrays(gl::TRIANGLES, 0, 3);
+            
+
+            gl.BindVertexArray(0);
+            //gl.BindBuffer(gl.ARRAY_BUFFER, 0);
+        }
+
+        window.gl_swap_window();
     }
+    */
 }
